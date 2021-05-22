@@ -1,0 +1,22 @@
+sensors: 
+    -
+      name: Температура датчик 1
+      id: 50c999f4-dfc5-4017-a87a-6567cb414ffe
+      value: 20
+    -
+      name: Датчик освещенности на 2-ром этаже, верхний угол правой стены
+      id: 50c999f4-dfc5
+      value: 50
+    -
+      name: Температура
+      id: 24393d0b-07c6-48dc-9bad-7eaec6919321
+      value: 30
+    -
+      name: Освещение
+      id: b4d3efe5-f1d2-4ea6-9cb8-fb0370379f4d
+      value: 70
+    -
+      name: Электроэнергия
+      id: f71b8d31-c182-40b9-b767-f65c333cfc4d
+      value: 220
+      
