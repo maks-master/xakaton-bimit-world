@@ -3,6 +3,8 @@ package ru.xakaton.bimit.mqtt.service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Random;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +70,10 @@ public class WorldService {
 		int gap = 2;
 		for (Sensor sensor : myConfig.getSensors()) {
 			double k = 0.1;
-			int minute = Instant.now().atZone(ZoneOffset.UTC).getMinute();
-			if (minute % gap == 0)
+			Instant in = Instant.now();
+			int minute = in.atZone(ZoneOffset.UTC).getMinute();
+			int sec = in.atZone(ZoneOffset.UTC).getSecond();
+			if (minute % gap == 0 && sec < gap * 3)
 				k = 1.5;
 			double value = Integer.parseInt(sensor.getValue()) + minute * k;
 			sendData(sensor, value);
