@@ -35,10 +35,13 @@ public class WorldService {
 	@Autowired
 	MqttConfiguration.MqttGateway mqttGateway;
 
+	@Autowired
+	ObjectMapper objectMapper;
+
 	@Value("${bimitProject}")
 	private String bimitProject;
 
-	@Scheduled(fixedDelay = 1000)
+	@Scheduled(fixedDelay = 1000/120)
 	public void askAndSend() {
 		for (Sensor sensor : myConfig.getSensors()) {
 			Random rnd = new Random();
@@ -56,10 +59,9 @@ public class WorldService {
 			
 			String topic = "/" + bimitProject + "/" + sensor.getId();
 
-			ObjectMapper mapper = new ObjectMapper();
 			String jsonResult = "";
 			try {
-				jsonResult = mapper.writeValueAsString(message);
+				jsonResult = objectMapper.writeValueAsString(message);
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
