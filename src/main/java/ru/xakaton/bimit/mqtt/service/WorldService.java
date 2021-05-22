@@ -2,6 +2,8 @@ package ru.xakaton.bimit.mqtt.service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -41,23 +43,26 @@ public class WorldService {
 	@Value("${bimitProject}")
 	private String bimitProject;
 
-	@Scheduled(fixedDelay = 1000/120)
+	@Scheduled(fixedDelay = 1000 / 120)
 	public void askAndSend() {
 		for (Sensor sensor : myConfig.getSensors()) {
 			Random rnd = new Random();
-			double temp = Integer.parseInt(sensor.getValue()) + rnd.nextDouble() * 10.0;
+			// double temp = Integer.parseInt(sensor.getValue()) + rnd.nextDouble() * 10.0;
+
+			Instant in = Instant.now();
+			double temp = Integer.parseInt(sensor.getValue()) + in.atZone(ZoneOffset.UTC).getMinute() * 0.1;
 
 			Message message = new Message();
 			message.setSensorID(sensor.getId());
 			message.setSensorName(sensor.getName());
 			MessageTimestamp messageTimestamp = new MessageTimestamp();
 			messageTimestamp.setTs(Timestamp.from(Instant.now()));
-			MessageData messageData= new MessageData();
+			MessageData messageData = new MessageData();
 			messageData.setValue(String.format("%04.2f", temp));
 			messageData.setInfo("");
 			messageTimestamp.setData(messageData);
 			message.setTs(messageTimestamp);
-			
+
 			String topic = "/" + bimitProject + "/" + sensor.getId();
 
 			String jsonResult = "";
@@ -66,7 +71,7 @@ public class WorldService {
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
-
+			
 			mqttGateway.sendToMqtt(jsonResult, topic);
 		}
 
