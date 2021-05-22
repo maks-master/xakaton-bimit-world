@@ -2,8 +2,8 @@ sensors:
     -
       name: Temp
       id: 50c999f4-dfc5-4017-a87a-6567cb414ffe
-      value: t
+      value: 20
     -
       name: Датчик освещенности на 2-ром этаже, верхний угол правой стены
       id: 50c999f4-dfc5
-      value: lumen
+      value: 50

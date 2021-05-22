@@ -42,7 +42,7 @@ public class WorldService {
 	public void askAndSend() {
 		for (Sensor sensor : myConfig.getSensors()) {
 			Random rnd = new Random();
-			double temp = 20 + rnd.nextDouble() * 20.0;
+			double temp = Integer.parseInt(sensor.getValue()) + rnd.nextDouble() * 10.0;
 
 			Message message = new Message();
 			message.setSensorID(sensor.getId());
