@@ -3,10 +3,6 @@ package ru.xakaton.bimit.mqtt.service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,38 +39,51 @@ public class WorldService {
 	@Value("${bimitProject}")
 	private String bimitProject;
 
-	@Scheduled(fixedDelay = 1000 / 120)
-	public void askAndSend() {
-		for (Sensor sensor : myConfig.getSensors()) {
-			Random rnd = new Random();
-			// double temp = Integer.parseInt(sensor.getValue()) + rnd.nextDouble() * 10.0;
+	public void sendData(Sensor sensor, double value) {
+		Message message = new Message();
+		message.setSensorID(sensor.getId());
+		message.setSensorName(sensor.getName());
+		MessageTimestamp messageTimestamp = new MessageTimestamp();
+		messageTimestamp.setTs(Timestamp.from(Instant.now()));
+		MessageData messageData = new MessageData();
+		messageData.setValue(String.format("%04.2f", value));
+		messageData.setInfo("");
+		messageTimestamp.setData(messageData);
+		message.setTs(messageTimestamp);
 
-			Instant in = Instant.now();
-			double temp = Integer.parseInt(sensor.getValue()) + in.atZone(ZoneOffset.UTC).getMinute() * 0.1;
+		String topic = "/" + bimitProject + "/" + sensor.getId();
 
-			Message message = new Message();
-			message.setSensorID(sensor.getId());
-			message.setSensorName(sensor.getName());
-			MessageTimestamp messageTimestamp = new MessageTimestamp();
-			messageTimestamp.setTs(Timestamp.from(Instant.now()));
-			MessageData messageData = new MessageData();
-			messageData.setValue(String.format("%04.2f", temp));
-			messageData.setInfo("");
-			messageTimestamp.setData(messageData);
-			message.setTs(messageTimestamp);
-
-			String topic = "/" + bimitProject + "/" + sensor.getId();
-
-			String jsonResult = "";
-			try {
-				jsonResult = objectMapper.writeValueAsString(message);
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
-			
-			mqttGateway.sendToMqtt(jsonResult, topic);
+		String jsonResult = "";
+		try {
+			jsonResult = objectMapper.writeValueAsString(message);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 		}
 
+		mqttGateway.sendToMqtt(jsonResult, topic);
+	}
+
+	@Scheduled(fixedDelay = 1000 / 120)
+	public void askAndSend() {
+		int gap = 2;
+		for (Sensor sensor : myConfig.getSensors()) {
+			double k = 0.1;
+			int minute = Instant.now().atZone(ZoneOffset.UTC).getMinute();
+			if (minute % gap == 0)
+				k = 1.5;
+			double value = Integer.parseInt(sensor.getValue()) + minute * k;
+			sendData(sensor, value);
+			gap++;
+		}
+
+	}
+
+	public void createAlarm() {
+		for (Sensor sensor : myConfig.getSensors()) {
+			double value = Integer.parseInt(sensor.getValue()) * 1.5;
+
+			sendData(sensor, value);
+		}
 	}
 
 }
