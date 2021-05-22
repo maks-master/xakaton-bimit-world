@@ -82,9 +82,11 @@ public class WorldService {
 	}
 
 	public void createAlarm() {
-		Sensor sensor = myConfig.getSensors().get(1);
-		double value = Integer.parseInt(sensor.getValue()) * 2;
-		sendData(sensor, value);
+		if (myConfig.getSensors().size() > 2) {
+			Sensor sensor = myConfig.getSensors().get(1);
+			double value = Integer.parseInt(sensor.getValue()) * 2;
+			sendData(sensor, value);
+		}
 	}
 
 }
