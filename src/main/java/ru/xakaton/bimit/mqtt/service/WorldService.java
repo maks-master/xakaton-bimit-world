@@ -67,15 +67,14 @@ public class WorldService {
 
 	@Scheduled(fixedDelay = 1000 / 120)
 	public void askAndSend() {
-		int gap = 2;
+		int gap = 3;
 		for (Sensor sensor : myConfig.getSensors()) {
-			double k = 0.1;
 			Instant in = Instant.now();
 			int minute = in.atZone(ZoneOffset.UTC).getMinute();
 			int sec = in.atZone(ZoneOffset.UTC).getSecond();
+			double value = Integer.parseInt(sensor.getValue()) + minute * 0.1;
 			if (minute % gap == 0 && sec < gap * 3)
-				k = 1.5;
-			double value = Integer.parseInt(sensor.getValue()) + minute * k;
+				value = Integer.parseInt(sensor.getValue()) * 1.5;
 			sendData(sensor, value);
 			gap++;
 		}
