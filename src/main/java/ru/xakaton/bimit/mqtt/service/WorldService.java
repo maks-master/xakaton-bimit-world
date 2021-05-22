@@ -54,6 +54,7 @@ public class WorldService {
 			messageTimestamp.setTs(Timestamp.from(Instant.now()));
 			MessageData messageData= new MessageData();
 			messageData.setValue(String.format("%04.2f", temp));
+			messageData.setInfo("");
 			messageTimestamp.setData(messageData);
 			message.setTs(messageTimestamp);
 			
