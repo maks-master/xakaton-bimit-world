@@ -76,7 +76,7 @@ public class WorldService {
 			if (minute % gap == 0 && sec < gap * 3)
 				value = Integer.parseInt(sensor.getValue()) * 1.5;
 			sendData(sensor, value);
-			gap++;
+			gap += 2;
 		}
 
 	}
