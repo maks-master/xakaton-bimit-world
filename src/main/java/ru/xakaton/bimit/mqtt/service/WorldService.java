@@ -73,7 +73,7 @@ public class WorldService {
 			int minute = in.atZone(ZoneOffset.UTC).getMinute();
 			int sec = in.atZone(ZoneOffset.UTC).getSecond();
 			double value = Integer.parseInt(sensor.getValue()) + minute * 0.1;
-			if (minute % gap == 0 && sec < gap * 3)
+			if (minute % gap == 0 && sec < gap * 2)
 				value = Integer.parseInt(sensor.getValue()) * 1.5;
 			sendData(sensor, value);
 			gap += 2;
