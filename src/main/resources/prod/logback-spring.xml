@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.springframework.security" level="DEBUG"/>
+    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="org.hibernate" level="DEBUG"/>
+    <logger name="org.hibernate.mapping" level="ERROR"/>
+    <logger name="org.hibernate.hql.internal.ast" level="ERROR"/>
+    <logger name="org.hibernate.hql.internal.antlr" level="ERROR"/>
+    <logger name="org.hibernate.persister.walking" level="ERROR"/>
+    <logger name="org.hibernate.loader.plan" level="ERROR"/>
+    <logger name="org.hibernate.engine.internal.Collections" level="ERROR"/>
+    <logger name="org.hibernate.engine.transaction" level="ERROR"/>
+    <logger name="org.hibernate.engine.internal" level="ERROR"/>
+    <logger name="ru.xakaton" level="INFO"/>
+    
+    
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+         <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+   </appender>
+
+   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      	<File>/usr/local/tomcat/logs/world.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+    	<fileNamePattern>/usr/local/tomcat/logs/world_%i.log</fileNamePattern>
+	        <minIndex>1</minIndex>
+            <maxIndex>3</maxIndex>
+        </rollingPolicy>
+             
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+             <maxFileSize>100MB</maxFileSize>
+        </triggeringPolicy>
+		<encoder>
+			<Pattern>%d{HH:mm:ss} %-5level %logger - %msg %n</Pattern>
+		</encoder>
+   </appender>    
+    
+   <root level="info">
+      <appender-ref ref="FILE" />
+      <!-- <appender-ref ref="STDOUT" /> -->
+   </root>
+</configuration>  
