@@ -56,8 +56,6 @@ public class WorldService {
 			
 			String topic = "/" + bimitProject + "/" + sensor.getId();
 
-			log.info(sensor.toString());
-
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonResult = "";
 			try {
