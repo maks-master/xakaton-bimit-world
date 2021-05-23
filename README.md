@@ -20,3 +20,25 @@ docker run -e BROKER=tcp://path_to_broker:1883  docker.pkg.github.com/maks-maste
 ```
 docker run --name docker-xakaton-world -e BROKER=tcp://path_to_broker:1883 --rm -d -v ./logs:/usr/local/tomcat/logs  docker.pkg.github.com/maks-master/xakaton-bimit-world/docker-xakaton-world:work
 ```
+
+
+
+## Сборка проекта
+
+Клонируем
+```
+git clone https://github.com/maks-master/xakaton-bimit-world.git
+```
+```
+cd ./xakaton-bimit-world
+```
+Сборка
+```
+mvn clean package -Pprod
+```
+Результат
+```
+./xakaton-bimit-world/target/workd.war
+```
+
+Используем сборку Dockerfile
