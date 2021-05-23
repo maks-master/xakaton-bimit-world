@@ -15,8 +15,9 @@ public class AlarmController {
 	WorldService worldService;
 
 	@GetMapping("/create")
-	public void createAlarm() {
+	public String createAlarm() {
 		worldService.createAlarm();
+		return "OK";
 	}
 
 }
